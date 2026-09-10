@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POT HUB Find Your Calm - E-Commerce Showcase</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased font-sans min-h-screen">
+
+    <!-- Top Navigation -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-brand-500 text-white flex items-center justify-center font-bold text-lg">PH</div>
+                <div>
+                    <h1 id="header-store-name" class="font-bold text-slate-900 leading-tight">POT HUB</h1>
+                    <p id="header-store-sub" class="text-xs text-slate-500">Find Your Calm</p>
+                </div>
+            </div>
+
+            <!-- View Switcher Toggle -->
+            <div class="flex items-center space-x-3 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                <button id="btn-view-buyer" onclick="switchView('buyer')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-900 shadow-sm">
+                    Buyer View
+                </button>
+                <button id="btn-view-owner" onclick="switchView('owner')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-900">
+                    Owner Studio
+                </button>
+                <button id="btn-view-qr" onclick="switchView('qr')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-900 flex items-center space-x-1">
+                    <i data-lucide="qr-code" class="w-3 h-3"></i>
+                    <span>QR Code</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ================= BUYER VIEW ================= -->
+        <section id="buyer-view" class="space-y-10">
+            <!-- Hero Banner -->
+            <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden">
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold tracking-wide uppercase text-brand-100">Official Store</span>
+                    <h2 id="hero-store-name" class="text-3xl sm:text-5xl font-extrabold tracking-tight">POT HUB Find Your Calm</h2>
+                    <p id="hero-store-desc" class="text-slate-200 text-sm sm:text-base leading-relaxed">
+                        Discover handcrafted products to bring peace and tranquility into your living space.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <a href="#contact-section" class="px-5 py-2.5 bg-brand-500 hover:bg-brand-600 font-bold rounded-xl text-sm transition-all shadow-lg flex items-center space-x-2">
+                            <i data-lucide="phone" class="w-4 h-4"></i>
+                            <span>Contact Us</span>
+                        </a>
+                        <a id="hero-live-loc-btn" href="#" target="_blank" class="hidden px-5 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 font-bold rounded-xl text-sm transition-all flex items-center space-x-2">
+                            <i data-lucide="navigation" class="w-4 h-4 text-emerald-400"></i>
+                            <span>Live Location</span>
+                        </a>
+                        <button onclick="switchView('qr')" class="px-5 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 font-bold rounded-xl text-sm transition-all flex items-center space-x-2">
+                            <i data-lucide="qr-code" class="w-4 h-4 text-emerald-400"></i>
+                            <span>Share QR Code</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Store Catalog -->
+            <div class="space-y-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-slate-900">Featured Catalog</h3>
+                    <span id="catalog-count" class="text-xs font-semibold px-2.5 py-1 bg-slate-200 rounded-full text-slate-600">2 Items</span>
+                </div>
+
+                <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Dynamic Product Cards will render here -->
+                </div>
+            </div>
+
+            <!-- Dynamic Contacts & Locations Section -->
+            <div id="contact-section" class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-900">Get in Touch & Visit Us</h3>
+                    <p class="text-sm text-slate-500">Reach out directly to our team across any of our contact channels.</p>
+                </div>
+
+                <!-- Live Location Banner (If set) -->
+                <div id="buyer-live-location-banner" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center animate-pulse">
+                            <i data-lucide="map-pin" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-900">Live Location Active</h4>
+                            <p class="text-xs text-slate-600">Track our live updates or real-time location link.</p>
+                        </div>
+                    </div>
+                    <a id="buyer-live-location-link" href="#" target="_blank" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-all flex items-center space-x-1">
+                        <span>Open Map</span>
+                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+
+                <!-- Contact Grids -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Phone Numbers Container -->
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-1">
+                            <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+                            <span>Phone Contact</span>
+                        </h4>
+                        <div id="buyer-phones-list" class="space-y-2">
+                            <!-- Dynamic phones -->
+                        </div>
+                    </div>
+
+                    <!-- Email Addresses Container -->
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-1">
+                            <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                            <span>Email Addresses</span>
+                        </h4>
+                        <div id="buyer-emails-list" class="space-y-2">
+                            <!-- Dynamic emails -->
+                        </div>
+                    </div>
+
+                    <!-- Physical Locations Container -->
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-1">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                            <span>Store Locations</span>
+                        </h4>
+                        <div id="buyer-locations-list" class="space-y-2">
+                            <!-- Dynamic locations -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= QR CODE VIEW ================= -->
+        <section id="qr-view" class="hidden space-y-8">
+            <div class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm space-y-6 max-w-2xl mx-auto">
+                <div class="text-center space-y-2">
+                    <h2 class="text-3xl font-bold text-slate-900">Share POT HUB</h2>
+                    <p class="text-slate-600">Scan the QR code below to visit our store online</p>
+                </div>
+
+                <!-- QR Code Container -->
+                <div class="flex justify-center bg-slate-50 p-8 rounded-2xl border border-slate-200">
+                    <div id="qr-code-container" class="bg-white p-4 rounded-xl"></div>
+                </div>
+
+                <!-- Store Website Link -->
+                <div class="bg-brand-50 border border-brand-200 rounded-2xl p-6 space-y-3">
+                    <h3 class="text-sm font-bold text-brand-900 flex items-center space-x-2">
+                        <i data-lucide="globe" class="w-5 h-5 text-brand-600"></i>
+                        <span>Visit Our Website</span>
+                    </h3>
+                    <div class="flex items-center space-x-2">
+                        <input type="text" id="website-url" value="https://pothubfindyourcalm.com" readonly class="flex-1 px-4 py-3 bg-white border border-brand-200 rounded-xl text-sm font-semibold text-brand-700 focus:outline-none">
+                        <button onclick="copyToClipboard(document.getElementById('website-url').value)" class="px-4 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-sm transition-all flex items-center space-x-1">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                            <span>Copy</span>
+                        </button>
+                    </div>
+                    <p class="text-xs text-slate-600">Open in your browser or share with friends and family.</p>
+                </div>
+
+                <!-- Download QR Code -->
+                <div class="flex gap-3 justify-center">
+                    <button onclick="downloadQRCode()" class="px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-sm transition-all flex items-center space-x-2">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span>Download QR Code</span>
+                    </button>
+                    <button onclick="printQRCode()" class="px-6 py-3 bg-slate-200 hover:bg-slate-300 text-slate-900 font-bold rounded-xl text-sm transition-all flex items-center space-x-2">
+                        <i data-lucide="printer" class="w-4 h-4"></i>
+                        <span>Print QR Code</span>
+                    </button>
+                </div>
+
+                <!-- Instructions -->
+                <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 space-y-2">
+                    <h4 class="text-xs font-bold text-blue-900 uppercase">How to use:</h4>
+                    <ul class="text-xs text-blue-800 space-y-1">
+                        <li>✓ Open your phone camera or QR code scanner</li>
+                        <li>✓ Point camera at the QR code above</li>
+                        <li>✓ Tap the notification to visit the store</li>
+                        <li>✓ Share the QR code on WhatsApp, Instagram, or print it</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= OWNER STUDIO ================= -->
+        <section id="owner-view" class="hidden space-y-8">
+            <!-- Security Gate (PIN Prompt) -->
+            <div id="owner-lock-screen" class="max-w-md mx-auto bg-white rounded-3xl p-8 border border-slate-200 shadow-xl text-center space-y-4">
+                <div class="w-16 h-16 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto text-2xl">
+                    <i data-lucide="lock" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">Owner Studio Verification</h3>
+                <p class="text-xs text-slate-500">Enter your owner security PIN to access management options.</p>
+                <input type="password" id="owner-pin-input" placeholder="Enter PIN (Default: 1234mystore)" class="w-full px-4 py-3 text-center text-lg border border-slate-200 rounded-xl font-mono focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                <button onclick="unlockOwnerStudio()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-sm transition-all shadow-md">
+                    Unlock Studio
+                </button>
+            </div>
+
+            <!-- Studio Management Dashboard (Hidden by default) -->
+            <div id="owner-dashboard" class="hidden space-y-8">
+                <div class="flex items-center justify-between bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Owner Studio</h2>
+                        <p class="text-xs text-slate-500">Manage store details, contact numbers, and catalog items.</p>
+                    </div>
+                    <button onclick="lockOwnerStudio()" class="px-4 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 flex items-center space-x-1">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                        <span>Lock Studio</span>
+                    </button>
+                </div>
+
+                <!-- Form to update store details -->
+                <form id="store-form" onsubmit="handleStoreSubmit(event)" class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+                    <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">Store & Contact Settings</h3>
+
+                    <!-- Basic Details -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Store Name</label>
+                            <input type="text" id="store-form-name" required class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Owner Name</label>
+                            <input type="text" id="store-form-owner" required class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Currency Code</label>
+                            <input type="text" id="store-form-currency" required class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Store Description</label>
+                        <textarea id="store-form-desc" rows="2" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                    </div>
+
+                    <!-- Live Location Link -->
+                    <div class="bg-brand-50/50 p-4 rounded-2xl border border-brand-100 space-y-2">
+                        <label class="block text-xs font-bold text-brand-800 uppercase flex items-center space-x-1">
+                            <i data-lucide="navigation" class="w-4 h-4 text-brand-600"></i>
+                            <span>Live Location Sharing Link (Google Maps / WhatsApp)</span>
+                        </label>
+                        <input type="url" id="store-form-livelocation" placeholder="https://maps.google.com/?q=..." class="w-full px-3.5 py-2 text-sm bg-white border border-brand-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <p class="text-xs text-slate-500">Paste your live tracking or map coordinates URL here.</p>
+                    </div>
+
+                    <!-- 5 Phone Numbers -->
+                    <div class="space-y-3 border-t border-slate-100 pt-4">
+                        <label class="block text-xs font-bold text-slate-700 uppercase">Contact Numbers (Up to 5)</label>
+                        <div id="phone-inputs-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <!-- Inputs 0-4 generated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- 5 Emails -->
+                    <div class="space-y-3 border-t border-slate-100 pt-4">
+                        <label class="block text-xs font-bold text-slate-700 uppercase">Email Addresses (Up to 5)</label>
+                        <div id="email-inputs-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <!-- Inputs 0-4 generated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- 5 Locations -->
+                    <div class="space-y-3 border-t border-slate-100 pt-4">
+                        <label class="block text-xs font-bold text-slate-700 uppercase">Physical Locations & Outlets (Up to 5)</label>
+                        <div id="location-inputs-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <!-- Inputs 0-4 generated dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end pt-4 border-t border-slate-100">
+                        <button type="submit" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-sm transition-all shadow-md flex items-center space-x-2">
+                            <i data-lucide="save" class="w-4 h-4"></i>
+                            <span>Save All Settings</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl text-xs font-bold transition-all transform translate-y-20 opacity-0 pointer-events-none z-50 flex items-center space-x-2">
+        <i data-lucide="check-circle" class="w-4 h-4 text-brand-500"></i>
+        <span id="toast-message">Settings updated!</span>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Constants & Defaults
+        const REQUIRED_DEFAULT_PIN = "1234mystore";
+        const STORE_WEBSITE = "https://pothubfindyourcalm.com";
+        
+        let storeInfo = {
+            name: "POT HUB Find Your Calm",
+            owner: "Find Your Calm",
+            currency: "R",
+            pin: REQUIRED_DEFAULT_PIN,
+            description: "Welcome to POT HUB Find Your Calm. Explore our unique handcrafted ceramics, planter pots, and calming wellness products.",
+            phones: ["0604967968"],
+            emails: ["pothubfindyourcalm@gmail.com"],
+            locations: ["Polokwane, Limpopo, South Africa"],
+            liveLocationUrl: "https://maps.google.com"
+        };
+
+        let products = [
+            {
+                id: 1,
+                title: "Handcrafted Ceramic Planter Pot",
+                price: 280,
+                desc: "Beautifully painted indoor ceramic pot with drainage tray.",
+                img: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 2,
+                title: "Calming Herbal Tea Infuser Kit",
+                price: 190,
+                desc: "Complete organic herbal tea selection with stainless steel infuser.",
+                img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80"
+            }
+        ];
+
+        let isOwnerUnlocked = false;
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStateFromLocalStorage();
+            buildOwnerFormInputs();
+            renderAll();
+            generateQRCode();
+        });
+
+        // Load & Save Local Storage
+        function loadStateFromLocalStorage() {
+            const savedStore = localStorage.getItem('pothub_store_info');
+            if (savedStore) {
+                try { storeInfo = JSON.parse(savedStore); } catch(e) {}
+            }
+        }
+
+        function saveStateToLocalStorage() {
+            localStorage.setItem('pothub_store_info', JSON.stringify(storeInfo));
+        }
+
+        // View Navigation
+        function switchView(view) {
+            const buyerView = document.getElementById('buyer-view');
+            const ownerView = document.getElementById('owner-view');
+            const qrView = document.getElementById('qr-view');
+            const btnBuyer = document.getElementById('btn-view-buyer');
+            const btnOwner = document.getElementById('btn-view-owner');
+            const btnQR = document.getElementById('btn-view-qr');
+
+            [buyerView, ownerView, qrView].forEach(el => el.classList.add('hidden'));
+            [btnBuyer, btnOwner, btnQR].forEach(btn => btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-900");
+
+            if (view === 'buyer') {
+                buyerView.classList.remove('hidden');
+                btnBuyer.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-900 shadow-sm";
+            } else if (view === 'owner') {
+                ownerView.classList.remove('hidden');
+                btnOwner.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-900 shadow-sm";
+            } else if (view === 'qr') {
+                qrView.classList.remove('hidden');
+                btnQR.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-900 shadow-sm flex items-center space-x-1";
+                generateQRCode();
+            }
+
+            lucide.createIcons();
+        }
+
+        // QR Code Generation
+        function generateQRCode() {
+            const container = document.getElementById('qr-code-container');
+            container.innerHTML = '';
+            
+            new QRCode(container, {
+                text: STORE_WEBSITE,
+                width: 300,
+                height: 300,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function downloadQRCode() {
+            const qrCanvas = document.querySelector('#qr-code-container canvas');
+            if (qrCanvas) {
+                const link = document.createElement('a');
+                link.href = qrCanvas.toDataURL('image/png');
+                link.download = 'pothub-qr-code.png';
+                link.click();
+                showToast('QR Code downloaded!');
+            }
+        }
+
+        function printQRCode() {
+            const qrCanvas = document.querySelector('#qr-code-container canvas');
+            if (qrCanvas) {
+                const printWindow = window.open();
+                printWindow.document.write('<img src="' + qrCanvas.toDataURL() + '" style="width:500px;height:500px;">');
+                printWindow.print();
+                showToast('Print dialog opened!');
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Website URL copied to clipboard!');
+            });
+        }
+
+        // Owner Authentication
+        function unlockOwnerStudio() {
+            const pinInput = document.getElementById('owner-pin-input').value;
+            if (pinInput === storeInfo.pin) {
+                isOwnerUnlocked = true;
+                document.getElementById('owner-lock-screen').classList.add('hidden');
+                document.getElementById('owner-dashboard').classList.remove('hidden');
+                populateOwnerForm();
+                showToast("Studio unlocked successfully!");
+            } else {
+                alert("Incorrect PIN. Please try again.");
+            }
+        }
+
+        function lockOwnerStudio() {
+            isOwnerUnlocked = false;
+            document.getElementById('owner-pin-input').value = "";
+            document.getElementById('owner-lock-screen').classList.remove('hidden');
+            document.getElementById('owner-dashboard').classList.add('hidden');
+        }
+
+        // Dynamically build Owner Studio 5x input fields
+        function buildOwnerFormInputs() {
+            const phoneGrid = document.getElementById('phone-inputs-grid');
+            const emailGrid = document.getElementById('email-inputs-grid');
+            const locationGrid = document.getElementById('location-inputs-grid');
+
+            phoneGrid.innerHTML = '';
+            emailGrid.innerHTML = '';
+            locationGrid.innerHTML = '';
+
+            for (let i = 0; i < 5; i++) {
+                phoneGrid.innerHTML += `
+                    <input type="text" id="input-phone-${i}" placeholder="Phone ${i + 1}" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
+                `;
+                emailGrid.innerHTML += `
+                    <input type="email" id="input-email-${i}" placeholder="Email ${i + 1}" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
+                `;
+                locationGrid.innerHTML += `
+                    <input type="text" id="input-location-${i}" placeholder="Location/Address ${i + 1}" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
+                `;
+            }
+        }
+
+        function populateOwnerForm() {
+            document.getElementById('store-form-name').value = storeInfo.name;
+            document.getElementById('store-form-owner').value = storeInfo.owner;
+            document.getElementById('store-form-currency').value = storeInfo.currency;
+            document.getElementById('store-form-desc').value = storeInfo.description;
+            document.getElementById('store-form-livelocation').value = storeInfo.liveLocationUrl || '';
+
+            for (let i = 0; i < 5; i++) {
+                document.getElementById(`input-phone-${i}`).value = storeInfo.phones[i] || '';
+                document.getElementById(`input-email-${i}`).value = storeInfo.emails[i] || '';
+                document.getElementById(`input-location-${i}`).value = storeInfo.locations[i] || '';
+            }
+        }
+
+        function handleStoreSubmit(e) {
+            e.preventDefault();
+
+            const gatherInputs = (prefix) => {
+                let list = [];
+                for (let i = 0; i < 5; i++) {
+                    const val = document.getElementById(`${prefix}-${i}`).value.trim();
+                    if (val) list.push(val);
+                }
+                return list;
+            };
+
+            storeInfo.name = document.getElementById('store-form-name').value;
+            storeInfo.owner = document.getElementById('store-form-owner').value;
+            storeInfo.currency = document.getElementById('store-form-currency').value;
+            storeInfo.description = document.getElementById('store-form-desc').value;
+            storeInfo.liveLocationUrl = document.getElementById('store-form-livelocation').value.trim();
+
+            storeInfo.phones = gatherInputs('input-phone');
+            storeInfo.emails = gatherInputs('input-email');
+            storeInfo.locations = gatherInputs('input-location');
+
+            saveStateToLocalStorage();
+            renderAll();
+            showToast("Store & Contact details saved!");
+        }
+
+        // Render Buyer Interface
+        function renderAll() {
+            // Header
+            document.getElementById('header-store-name').textContent = storeInfo.name;
+            document.getElementById('header-store-sub').textContent = storeInfo.owner;
+
+            // Hero
+            document.getElementById('hero-store-name').textContent = storeInfo.name;
+            document.getElementById('hero-store-desc').textContent = storeInfo.description;
+
+            // Live Location Buttons & Banners
+            const heroLiveBtn = document.getElementById('hero-live-loc-btn');
+            const buyerLiveBanner = document.getElementById('buyer-live-location-banner');
+            const buyerLiveLink = document.getElementById('buyer-live-location-link');
+
+            if (storeInfo.liveLocationUrl) {
+                heroLiveBtn.href = storeInfo.liveLocationUrl;
+                heroLiveBtn.classList.remove('hidden');
+                buyerLiveBanner.classList.remove('hidden');
+                buyerLiveLink.href = storeInfo.liveLocationUrl;
+            } else {
+                heroLiveBtn.classList.add('hidden');
+                buyerLiveBanner.classList.add('hidden');
+            }
+
+            // Contact Lists (Phones)
+            const phonesContainer = document.getElementById('buyer-phones-list');
+            if (storeInfo.phones.length > 0) {
+                phonesContainer.innerHTML = storeInfo.phones.map(p => `
+                    <a href="tel:${p}" class="flex items-center space-x-2 p-2.5 rounded-xl bg-slate-50 hover:bg-brand-50 border border-slate-100 transition-all text-xs font-semibold text-slate-800">
+                        <i data-lucide="phone-call" class="w-3.5 h-3.5 text-brand-600"></i>
+                        <span>${p}</span>
+                    </a>
+                `).join('');
+            } else {
+                phonesContainer.innerHTML = `<p class="text-xs text-slate-400">No phone numbers listed.</p>`;
+            }
+
+            // Contact Lists (Emails)
+            const emailsContainer = document.getElementById('buyer-emails-list');
+            if (storeInfo.emails.length > 0) {
+                emailsContainer.innerHTML = storeInfo.emails.map(e => `
+                    <a href="mailto:${e}" class="flex items-center space-x-2 p-2.5 rounded-xl bg-slate-50 hover:bg-brand-50 border border-slate-100 transition-all text-xs font-semibold text-slate-800 truncate">
+                        <i data-lucide="mail" class="w-3.5 h-3.5 text-brand-600"></i>
+                        <span class="truncate">${e}</span>
+                    </a>
+                `).join('');
+            } else {
+                emailsContainer.innerHTML = `<p class="text-xs text-slate-400">No emails listed.</p>`;
+            }
+
+            // Contact Lists (Locations)
+            const locationsContainer = document.getElementById('buyer-locations-list');
+            if (storeInfo.locations.length > 0) {
+                locationsContainer.innerHTML = storeInfo.locations.map(loc => `
+                    <div class="flex items-start space-x-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-semibold text-slate-800">
+                        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-brand-600 mt-0.5 shrink-0"></i>
+                        <span>${loc}</span>
+                    </div>
+                `).join('');
+            } else {
+                locationsContainer.innerHTML = `<p class="text-xs text-slate-400">No locations listed.</p>`;
+            }
+
+            // Catalog
+            const productGrid = document.getElementById('product-grid');
+            document.getElementById('catalog-count').textContent = `${products.length} Items`;
+            
+            productGrid.innerHTML = products.map(prod => `
+                <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col">
+                    <img src="${prod.img}" alt="${prod.title}" class="w-full h-48 object-cover">
+                    <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h4 class="font-bold text-slate-900">${prod.title}</h4>
+                            <p class="text-xs text-slate-500 mt-1">${prod.desc}</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+                            <span class="text-lg font-black text-slate-900">${storeInfo.currency} ${prod.price}</span>
+                            <button onclick="alert('Inquiry sent for ${prod.title}')" class="px-4 py-2 bg-slate-900 hover:bg-brand-600 text-white font-bold rounded-xl text-xs transition-all flex items-center space-x-1">
+                                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+                                <span>Inquire</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        // Toast Helpers
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
